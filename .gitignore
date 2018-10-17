@@ -1,0 +1,12 @@
+CMakeCache.txt
+*/CMakeFiles/*
+CMakeFiles/*
+*.sublime-project
+*.sublime-workspace
+cmake_install.cmake
+modules/*
+compile_commands.json
+blaze
+pybind11
+Makefile
+*.so
