@@ -64,7 +64,7 @@ private:
   template <typename T>
   static DataKey createKey(std::string const &name)
   {
-    return DataKey(name, NumericTraits<T>::tag());
+    return DataKey(name, NumericTraits<T>::name());
   }
 
   template <typename T>

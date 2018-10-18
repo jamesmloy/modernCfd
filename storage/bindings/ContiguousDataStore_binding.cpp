@@ -11,4 +11,5 @@ void ContiguousDataStore_binding(py::module &m)
   cdsClass.def(py::init<int>());
 
   m.def("addData_double", &addData<double>, "Add double storage");
+  m.def("addData_int", &addData<int>, "Add integer storage");
 }
