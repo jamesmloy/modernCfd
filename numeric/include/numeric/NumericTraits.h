@@ -64,3 +64,19 @@ struct NumericTraits<blaze::DynamicVector<T>>
     return "DynamicVector_" + NumericTraits<T>::name();
   }
 };
+
+
+#include "blaze/math/StaticVector.h"
+#include <sstream>
+
+
+template <typename T, size_t N>
+struct NumericTraits<blaze::StaticVector<T, N>>
+{
+  static std::string name()
+  {
+    std::ostringstream comp;
+    comp << N;
+    return "StaticVector" + comp.str() + "_" + NumericTraits<T>::name();
+  }
+};
