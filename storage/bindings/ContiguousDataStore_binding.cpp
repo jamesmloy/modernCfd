@@ -1,18 +1,19 @@
 #include "storage/ContiguousDataStore.h"
 
-//#include "numeric/NumericTraits.h"
-
 #include "pybind11/pybind11.h"
 
 namespace py = pybind11;
 
-template <typename T>
-void addData_b(py::module &m)
+namespace
 {
-  auto const n = NumericTraits<T>::name();
-  std::string const fName = std::string("addData_") + n;
-  std::string const doc = std::string("Add ") + n + std::string("storage");
-  m.def(fName.data(), &addData<double>, doc.data());
+  template <typename T>
+  void addData_b(py::module &m)
+  {
+    auto const n = NumericTraits<T>::name();
+    std::string const fName = std::string("addData_") + n;
+    std::string const doc = std::string("Add ") + n + std::string("storage");
+    m.def(fName.data(), &addData<double>, doc.data());
+  }
 }
 
 void ContiguousDataStore_binding(py::module &m)

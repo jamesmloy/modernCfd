@@ -80,3 +80,18 @@ struct NumericTraits<blaze::StaticVector<T, N>>
     return "StaticVector" + comp.str() + "_" + NumericTraits<T>::name();
   }
 };
+
+
+#include "blaze/math/StaticMatrix.h"
+
+template <typename T, size_t M, size_t N, bool SO>
+struct NumericTraits<blaze::StaticMatrix<T, M, N, SO>>
+{
+  static std::string name()
+  {
+    std::ostringstream comp;
+    comp << M << "x" << N;
+    comp << (SO == blaze::rowMajor ? "row" : "col");
+    return "StaticMatrix" + comp.str() + "_" + NumericTraits<T>::name();
+  }
+};
