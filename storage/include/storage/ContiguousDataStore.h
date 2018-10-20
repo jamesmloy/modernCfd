@@ -1,3 +1,6 @@
+#ifndef _CONTIGUOUS_DATA_STORE_H_
+#define _CONTIGUOUS_DATA_STORE_H_
+
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -104,3 +107,5 @@ void addData(ContiguousDataStore &store, std::string &name)
 
   store._dataMap.emplace(k, std::move(dh));
 }
+
+#endif

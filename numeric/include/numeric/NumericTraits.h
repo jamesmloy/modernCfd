@@ -1,3 +1,6 @@
+#ifndef _NUMERIC_TRAITS_H_
+#define _NUMERIC_TRAITS_H_
+
 #include <string>
 
 template <typename T>
@@ -95,3 +98,6 @@ struct NumericTraits<blaze::StaticMatrix<T, M, N, SO>>
     return "StaticMatrix" + comp.str() + "_" + NumericTraits<T>::name();
   }
 };
+
+
+#endif

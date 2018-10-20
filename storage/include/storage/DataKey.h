@@ -1,3 +1,6 @@
+#ifndef _DATA_KEY_H_
+#define _DATA_KEY_H_
+
 #include <string>
 #include <functional>
 
@@ -25,3 +28,6 @@ bool operator==(DataKey const &a, DataKey const &b)
 {
   return a.hash == b.hash;
 }
+
+
+#endif
