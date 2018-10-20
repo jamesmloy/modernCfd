@@ -6,7 +6,6 @@ file(GLOB BINDINGS "bindings/*.cpp")
 
 include(${CFD_HOME}/config/GetBlaze.cmake)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY libs)
 add_library(${LIB_NAME} SHARED ${SOURCES})
 target_include_directories(${LIB_NAME} PRIVATE include ${CFD_HOME}/numeric/include)
 
