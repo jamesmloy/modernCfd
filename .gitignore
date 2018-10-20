@@ -10,3 +10,4 @@ blaze
 pybind11
 Makefile
 *.so
+build/*
