@@ -10,5 +10,7 @@ set(MODULE_FOLDER ${CFD_HOME}/modules)
 add_subdirectory(pybind11)
 
 add_subdirectory(storage)
+add_subdirectory(connectivity)
+add_subdirectory(discretization)
 
 add_subdirectory(gtest)

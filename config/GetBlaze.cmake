@@ -1,1 +1,1 @@
-include_directories(../blaze)
+include_directories(${CFD_HOME}/blaze)
