@@ -11,7 +11,8 @@ add_library(${LIB_NAME} SHARED ${SOURCES})
 target_include_directories(${LIB_NAME} PRIVATE include
                                                ${CFD_HOME}/discretization/include
                                                ${CFD_HOME}/storage/include
-                                               ${CFD_HOME}/connectivity/include)
+                                               ${CFD_HOME}/connectivity/include
+                                               ${CFD_HOME}/utils/include)
 
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 14)
 
@@ -21,7 +22,8 @@ set_target_properties(${MOD_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${MODULE_F
 target_include_directories(${MOD_NAME} PRIVATE include
                                                ${CFD_HOME}/discretization/include
                                                ${CFD_HOME}/storage/include
-                                               ${CFD_HOME}/connectivity/include)
+                                               ${CFD_HOME}/connectivity/include
+                                               ${CFD_HOME}/utils/include)
 
 # enable_testing()
 # add_subdirectory(src/test)

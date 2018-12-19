@@ -1,5 +1,7 @@
 #include "readers/EntitiesReader.h"
 
+#include "utils/PrintElements.h"
+
 
 namespace {
 
@@ -41,6 +43,24 @@ parseEntity(std::ifstream &f, bool hasChildren = true)
 }
 
 
+void EntitiesReader::addEdgeChildren(std::vector<int> &&c)
+{
+  _edgeChildren.emplace_back(c);
+}
+
+
+void EntitiesReader::addFaceChildren(std::vector<int> &&c)
+{
+  _faceChildren.emplace_back(c);
+}
+
+
+void EntitiesReader::addVolChildren(std::vector<int> &&c)
+{
+  _volChildren.emplace_back(c);
+}
+
+
 void EntitiesReader::initializeIds(int const nv, int const ne, int const nf,
                                    int const nvol)
 {
@@ -60,20 +80,45 @@ void EntitiesReader::initializeIds(int const nv, int const ne, int const nf,
 std::ostream &operator<<(std::ostream &s, EntitiesReader const &e)
 {
   s << "Vertex Ids: ";
-  for_each(begin(e._vertIds), end(e._vertIds),
-           [&s](int const &i) { s << i << " "; });
+  Utils::printElements(s, e._vertIds);
+  s << "\n";
 
   s << "\nEdge Ids: ";
-  for_each(begin(e._edgeIds), end(e._edgeIds),
-           [&s](int const &i) { s << i << " "; });
+  Utils::printElements(s, e._edgeIds);
+  s << "\n";
+
+  for_each(std::begin(e._edgeChildren), std::end(e._edgeChildren),
+           [&s] (std::vector<int> const& v)
+           {
+             s << "Edge children: ";
+             Utils::printElements(s, v);
+             s << "\n";
+           });
 
   s << "\nFace Ids: ";
-  for_each(begin(e._faceIds), end(e._faceIds),
-           [&s](int const &i) { s << i << " "; });
+  Utils::printElements(s, e._faceIds);
+  s << "\n";
+
+  for_each(std::begin(e._faceChildren), std::end(e._faceChildren),
+           [&s] (std::vector<int> const& v)
+           {
+             s << "Face children: ";
+             Utils::printElements(s, v);
+             s << "\n";
+           });
 
   s << "\nVolume Ids: ";
-  for_each(begin(e._volIds), end(e._volIds),
-           [&s](int const &i) { s << i << " "; });
+  Utils::printElements(s, e._volIds);
+  s << "\n";
+
+  for_each(std::begin(e._volChildren), std::end(e._volChildren),
+           [&s] (std::vector<int> const& v)
+           {
+             s << "Volume children: ";
+             Utils::printElements(s, v);
+             s << "\n";
+           });
+
   return s;
 }
 
@@ -107,28 +152,21 @@ void EntitiesReader::readSection(std::ifstream &f)
     for (int i = 0; i != nVerts; ++i)
     {
       auto eInfo = parseEntity(f, false);
-      std::cout << "parsed vertex entity # " << i << ", with id "
-                << std::get<0>(eInfo) << std::endl;
-
       addVert(std::get<0>(eInfo));
     }
 
     for (int i = 0; i != nEdges; ++i)
     {
       auto eInfo = parseEntity(f);
-
-      std::cout << "parsed edge entity # " << i << ", with id "
-                << std::get<0>(eInfo) << std::endl;
       addEdge(std::get<0>(eInfo));
+      addEdgeChildren(std::move(std::get<1>(eInfo)));
     }
 
     for (int i = 0; i != nFaces; ++i)
     {
       auto eInfo = parseEntity(f);
-
-      std::cout << "parsed face entity # " << i << ", with id "
-                << std::get<0>(eInfo) << std::endl;
       addFace(std::get<0>(eInfo));
+      addFaceChildren(std::move(std::get<1>(eInfo)));
     }
 
     for (int i = 0; i != nVols; ++i)
@@ -138,6 +176,7 @@ void EntitiesReader::readSection(std::ifstream &f)
       std::cout << "parsed volume entity # " << i << ", with id "
                 << std::get<0>(eInfo) << std::endl;
       addVol(std::get<0>(eInfo));
+      addVolChildren(std::move(std::get<1>(eInfo)));
     }
 
     scanSection(endLabel(), f);

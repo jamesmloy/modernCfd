@@ -26,6 +26,10 @@ class EntitiesReader : public SectionReader
   void addFace(int const id) { _faceIds.push_back(id); }
   void addVol(int const id) { _volIds.push_back(id); }
 
+  void addEdgeChildren(std::vector<int> &&c);
+  void addFaceChildren(std::vector<int> &&c);
+  void addVolChildren(std::vector<int> &&c);
+
   friend std::ostream &operator<<(std::ostream &s, EntitiesReader const &e);
 
 public:
