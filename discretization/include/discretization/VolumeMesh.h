@@ -17,6 +17,10 @@ public:
   VolumeMesh(StorageSite const &cells, StorageSite const &faces,
              StorageSite const &vertices);
 
+  using SitePair = std::pair<StorageSite const*, StorageSite const*>;
+  using CrConnPtr = std::unique_ptr<CrConnectivity>;
+  using SiteToConnectivityMap = std::map<SitePair const, CrConnPtr>;
+
   StorageSite&       cells()       noexcept
   { return _cells; }
   StorageSite const& cells() const noexcept
@@ -44,10 +48,6 @@ private:
   StorageSite _vertices;
 
   std::vector<SubsetStorageSite> _boundaries;
-
-  using SitePair = std::pair<StorageSite const*, StorageSite const*>;
-  using CrConnPtr = std::unique_ptr<CrConnectivity>;
-  using SiteToConnectivityMap = std::map<SitePair const, CrConnPtr>;
 
   SiteToConnectivityMap _connectivities;
 };
