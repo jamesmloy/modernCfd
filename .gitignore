@@ -12,3 +12,4 @@ pybind11
 Makefile
 *.so
 build/*
+myNotes.txt*
