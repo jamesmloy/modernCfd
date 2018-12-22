@@ -3,12 +3,11 @@
 
 #include "readers/SectionReader.h"
 
-#include <regex>
+#include <vector>
+
 
 class EntitiesReader : public SectionReader
 {
-  std::regex _countsRe{"(\\d+) (\\d+) (\\d+) (\\d+)"};
-
   using ChildrenList = std::vector<std::vector<int>>;
 
   std::vector<int> _vertIds;
