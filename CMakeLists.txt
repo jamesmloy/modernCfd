@@ -13,5 +13,6 @@ add_subdirectory(storage)
 add_subdirectory(connectivity)
 add_subdirectory(discretization)
 add_subdirectory(readers)
+add_subdirectory(mpi)
 
 add_subdirectory(gtest)
