@@ -13,3 +13,4 @@ Makefile
 *.so
 build/*
 myNotes.txt*
+__pycache__
