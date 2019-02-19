@@ -4,7 +4,7 @@ CMakeFiles/*
 *.sublime-project
 *.sublime-workspace
 cmake_install.cmake
-modules/*
+modules/libs/*
 compile_commands.json
 blaze
 gtest

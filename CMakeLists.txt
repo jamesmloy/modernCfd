@@ -5,7 +5,7 @@ project(cfd_proto)
 set(CFD_HOME ${CMAKE_SOURCE_DIR})
 set(CFD_BUILD_DIR ${CMAKE_BINARY_DIR})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(MODULE_FOLDER ${CFD_HOME}/modules)
+set(MODULE_FOLDER ${CFD_HOME}/modules/libs)
 
 add_subdirectory(pybind11)
 
