@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import sys
+import importlib
+import os
+
+
+def main():
+
+    modString = sys.argv[1]
+
+    # remove trailing forward slash
+    # if it exists
+    if modString[-1] == '/':
+        modString = modString[:-1]
+
+    modString = modString.replace('/', '.')
+
+    thisFolder = os.path.dirname(os.path.realpath(__file__))
+
+    sys.path.append(thisFolder + '/../modules')
+
+    m = importlib.import_module(modString)
+    m.main()
+
+
+if __name__ == '__main__':
+    main()

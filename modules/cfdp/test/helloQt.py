@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
 import sys
 import vtk
-from PyQt5 import QtCore, QtGui
 from PyQt5 import Qt
 
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -56,6 +53,15 @@ def makeUgrid():
     return ugrid
 
 
+class MyInteractor(vtk.vtkInteractorStyleTrackballCamera):
+
+    def OnMouseWheelForward(self):
+        super().OnMouseWheelBackward()
+
+    def OnMouseWheelBackward(self):
+        super().OnMouseWheelForward()
+
+
 class MainWindow(Qt.QMainWindow):
 
     def __init__(self, parent=None):
@@ -69,6 +75,9 @@ class MainWindow(Qt.QMainWindow):
         self.ren = vtk.vtkRenderer()
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
+
+        style = MyInteractor()
+        self.iren.SetInteractorStyle(style)
 
         ugrid = makeUgrid()
 
@@ -98,7 +107,7 @@ class MainWindow(Qt.QMainWindow):
         self.iren.Start()
 
 
-if __name__ == "__main__":
+def main():
     app = Qt.QApplication(sys.argv)
     window = MainWindow()
     sys.exit(app.exec_())
