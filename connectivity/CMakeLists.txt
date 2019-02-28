@@ -9,6 +9,7 @@ include(${CFD_HOME}/config/GetBlaze.cmake)
 add_library(${LIB_NAME} SHARED ${SOURCES})
 
 target_include_directories(${LIB_NAME} PRIVATE include)
+add_blaze(${LIB_NAME})
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 14)
 
 enable_testing()

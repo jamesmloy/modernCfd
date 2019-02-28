@@ -12,6 +12,7 @@ target_include_directories(${LIB_NAME} PRIVATE
                            include
                            ${CFD_HOME}/storage/include
                            ${CFD_HOME}/connectivity/include)
+add_blaze(${LIB_NAME})
 
 target_link_libraries(${LIB_NAME} PRIVATE storage connectivity)
 

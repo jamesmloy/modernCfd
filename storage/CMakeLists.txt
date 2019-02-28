@@ -8,11 +8,13 @@ include(${CFD_HOME}/config/GetBlaze.cmake)
 
 add_library(${LIB_NAME} SHARED ${SOURCES})
 target_include_directories(${LIB_NAME} PRIVATE include ${CFD_HOME}/numeric/include)
+add_blaze(${LIB_NAME})
 
 pybind11_add_module(${MOD_NAME} ${BINDINGS})
 target_link_libraries(${MOD_NAME} PRIVATE ${LIB_NAME})
 set_target_properties(${MOD_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${MODULE_FOLDER})
 target_include_directories(${MOD_NAME} PRIVATE include ${CFD_HOME}/numeric/include)
+add_blaze(${MOD_NAME})
 
 enable_testing()
 add_subdirectory(src/test)

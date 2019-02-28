@@ -13,6 +13,7 @@ target_include_directories(${LIB_NAME} PRIVATE include
                                                ${CFD_HOME}/storage/include
                                                ${CFD_HOME}/connectivity/include
                                                ${CFD_HOME}/utils/include)
+add_blaze(${LIB_NAME})
 
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 14)
 
