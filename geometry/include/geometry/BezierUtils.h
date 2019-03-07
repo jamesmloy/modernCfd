@@ -18,32 +18,11 @@ namespace BezierUtils
   template <typename T, size_t N>
   using DynVec = blaze::DynamicVector<StatVec<T, N>>;
 
+
   namespace detail
   {
-    template <typename ...Args>
-    struct EvaluateCurvePoint {};
-
-    template <typename T, size_t N>
-    struct EvaluateCurvePoint<StatVec<T, N>, DynVec<T, N>, T>
-    {
-      static inline
-      StatVec<T, N> call(DynVec<T, N> const &pts, T const &u)
-      {
-        // copy pts
-        DynVec<T, N> q {pts};
-        size_t const n = q.size();
-
-        T const u1 {T(1) - u};
-        for (size_t k = 1; k != n; ++k)
-          for (size_t i = 0; i != (n - k); ++i)
-            q[i] = u1 * q[i] + u * q[i + 1];
-
-        return q[0];
-      }
-    };
-
     template <typename PtsIt, typename T>
-    struct EvaluateCurvePoint<PtsIt, T>
+    struct EvaluateCurvePoint
     {
       using Pts = Utils::RemoveConstRef<decltype(*std::declval<PtsIt>())>;
       using PtsArray = blaze::DynamicVector<Pts>;
@@ -64,7 +43,16 @@ namespace BezierUtils
           }
         }
 
-        return EvaluateCurvePoint<Pts, PtsArray, T>::call(q, u);
+        {
+          T const u1 {T(1) - u};
+          auto const bq = begin(q);
+          auto const eq = end(q);
+          for (size_t k = 1; k != n; ++k)
+            for (auto i = bq; i !=  (eq - k); ++i)
+              *i = *i * u1 + *(i + 1) * u;
+        }
+
+        return q[0];
       }
 
     };
@@ -94,8 +82,7 @@ namespace BezierUtils
   template <typename Pts, typename T>
   auto evaluateCurvePoint(Pts const &pts, T const &u)
   {
-    using Cpt = Utils::RemoveConstRef<decltype(*pts.begin())>;
-    return detail::EvaluateCurvePoint<Cpt, Pts, T>::call(pts, u);
+    return evaluateCurvePoint(begin(pts), end(pts), u);
   }
 
 

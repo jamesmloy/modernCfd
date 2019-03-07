@@ -4,6 +4,7 @@
 #include "blaze/math/DynamicMatrix.h"
 #include "blaze/math/DynamicVector.h"
 #include "blaze/math/StaticVector.h"
+#include "blaze/math/Row.h"
 
 #include "BezierUtils.h"
 
@@ -49,11 +50,7 @@ public:
     DynVec<CptNonRat> q {_cpts.rows(), CptNonRat{0}};
 
     for (int i = 0; i != _cpts.rows(); ++i)
-    {
-      auto const b = _cpts.begin(i);
-      auto const e = _cpts.end(i);
-      q[i] = evaluateCurvePoint(b, e, u);
-    }
+      q[i] = evaluateCurvePoint(blaze::row(_cpts, i), u);
 
     return reduceDim(evaluateCurvePoint(q, v));
   }

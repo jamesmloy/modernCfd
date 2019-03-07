@@ -2,7 +2,10 @@ set(UNIT_TEST GeometryTests)
 
 include(${CFD_HOME}/config/GetBlaze.cmake)
 
-add_executable(${UNIT_TEST} GeometryTests.cpp)
+file(GLOB SOURCES "*.cpp")
+add_executable(${UNIT_TEST} ${SOURCES})
+
+target_compile_definitions(${UNIT_TEST} PRIVATE UNIT_TEST=${UNIT_TEST})
 
 target_include_directories(${UNIT_TEST} PRIVATE ${gtest_SOURCE_DIR}/include
                                                 ${gtest_SOURCE_DIR}

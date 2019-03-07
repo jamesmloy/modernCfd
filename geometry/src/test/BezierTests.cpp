@@ -22,7 +22,7 @@ namespace
     }
   }
 
-  TEST(GeometryTests, BernsteinEndPts)
+  TEST(UNIT_TEST, BernsteinEndPts)
   {
     endPtsTest<double, 1>();
     endPtsTest<double, 2>();
@@ -46,7 +46,7 @@ namespace
     EXPECT_EQ(s, 1.0);
   }
 
-  TEST(GeometryTests, BernsteinPartition)
+  TEST(UNIT_TEST, BernsteinPartition)
   {
     partitionTest<double, 1>();
     partitionTest<double, 2>();
@@ -68,7 +68,7 @@ namespace
   template <typename T, size_t N>
   using DynMat = blaze::DynamicMatrix<StatVec<T, N>>;
 
-  TEST(GeometryTests, BezierLinear)
+  TEST(UNIT_TEST, BezierLinear)
   {
     {
       DynVec<double, 3> cpts {3, StatVec<double, 3>{0.0}};
@@ -87,7 +87,7 @@ namespace
     }
   }
 
-  TEST(GeometryTest, BezierCircle)
+  TEST(UNIT_TEST, BezierCircle)
   {
     using blaze::norm;
     DynVec<double, 3> cpts {{StatVec<double, 3>{1.0, 0.0, 0.0},
@@ -112,7 +112,7 @@ namespace
   }
 
 
-  TEST(GeometryTest, BezierSurfaceLinear)
+  TEST(UNIT_TEST, BezierSurfaceLinear)
   {
     DynMat<double, 3> cpts(2, 2);
 
@@ -160,7 +160,7 @@ namespace
   }
 
 
-  TEST(GeometryTest, BezierSurfaceCylinder)
+  TEST(UNIT_TEST, BezierSurfaceCylinder)
   {
     using blaze::norm;
     DynMat<double, 3> cpts(2, 3);

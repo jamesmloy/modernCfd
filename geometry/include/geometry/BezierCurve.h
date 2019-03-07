@@ -14,20 +14,16 @@ public:
 
   template <typename Type> using DynVec = blaze::DynamicVector<Type>;
 
-  explicit BezierCurve(DynVec<CptRat> const &cpts) : _cpts(cpts.size())
-  {
-    for (int i = 0; i != cpts.size(); ++i)
-    {
-      std::copy(begin(cpts[i]), end(cpts[i]), begin(_cpts[i]));
-      _cpts[i][Dim] = 1;
-    }
-  }
-
   BezierCurve(DynVec<CptRat> const &cpts, DynVec<T> const &wts)
       : _cpts(cpts.size(), CptNonRat{0})
   {
     using BezierUtils::transformToHomog;
     transformToHomog(begin(cpts), end(cpts), begin(wts), begin(_cpts));
+  }
+
+  explicit BezierCurve(DynVec<CptRat> const &cpts)
+      : BezierCurve(cpts, DynVec<T>(cpts.size(), T(1)))
+  {
   }
 
   CptRat operator()(T const &u) const
