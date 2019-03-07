@@ -15,10 +15,6 @@ namespace BezierUtils
   template <typename T, size_t N>
   using StatVec = blaze::StaticVector<T, N>;
 
-  template <typename T, size_t N>
-  using DynVec = blaze::DynamicVector<StatVec<T, N>>;
-
-
   namespace detail
   {
     template <typename PtsIt, typename T>
@@ -56,20 +52,6 @@ namespace BezierUtils
       }
 
     };
-
-    template <typename T, size_t N>
-    struct ReduceDim
-    {
-      static inline
-      StatVec<T, N - 1> call(StatVec<T, N> const &pw)
-      {
-        StatVec<T, N - 1> p{0};
-        T const oneOverLast = T(1) / pw[N-1];
-        for (int i = 0; i < N-1; ++i)
-          p[i] = pw[i] * oneOverLast;
-        return p;
-      }
-    };
   }
 
   template <typename PtsIt, typename T>
@@ -89,7 +71,11 @@ namespace BezierUtils
   template <typename T, size_t N>
   StatVec<T, N-1> reduceDim(StatVec<T, N> const &pw)
   {
-    return detail::ReduceDim<T, N>::call(pw);
+    StatVec<T, N - 1> p{0};
+    T const oneOverLast = T(1) / pw[N-1];
+    for (int i = 0; i < N-1; ++i)
+      p[i] = pw[i] * oneOverLast;
+    return p;
   }
 
   template <typename PtsIt,
