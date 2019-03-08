@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 
+#include "geometry/BezierCurve.h"
+
 #include "geometry/NurbsUtils.h"
+#include "geometry/NurbsCurve.h"
 
 #include "blaze/math/DynamicVector.h"
 
@@ -68,6 +71,30 @@ namespace
     {
       auto const n = basisFuns(3, 2, 5.0, begin(U), end(U));
       EXPECT_DOUBLE_EQ(1.0, std::accumulate(begin(n), end(n), 0.0));
+    }
+  }
+
+
+  TEST(UNIT_TEST, NurbsCurve)
+  {
+    using blaze::DynamicVector;
+    using StatVec3  = blaze::StaticVector<double, 3>;
+
+    DynamicVector<StatVec3> cpts(4, StatVec3{0});
+    cpts[1] = StatVec3 {1., 0.5, 0};
+    cpts[2] = StatVec3 {2., 1.0, 0.25};
+    cpts[3] = StatVec3 {1., 0.75, 0.5};
+
+    NurbsCurve<double, 3> nurb(cpts);
+    BezierCurve<double, 3> bc(cpts);
+
+    for (double u = 0.0; u <= 1.0; u += 0.1)
+    {
+      auto const n = nurb(u);
+      auto const b = bc(u);
+      EXPECT_DOUBLE_EQ(n[0], b[0]);
+      EXPECT_DOUBLE_EQ(n[1], b[1]);
+      EXPECT_DOUBLE_EQ(n[2], b[2]);
     }
   }
 }
