@@ -25,8 +25,15 @@ public:
 
   explicit BezierCurve(DynVec<CptRat> const &cpts)
     : BezierCurve(cpts, DynVec<T>(cpts.size(), T(1)))
-  {
-  }
+  {}
+
+  BezierCurve(BezierCurve const &other)
+    : _cpts(other._cpts)
+  {}
+
+  BezierCurve(BezierCurve &&other)
+    : _cpts(std::move(other._cpts))
+  {}
 
   CptRat operator()(T const &u) const
   {

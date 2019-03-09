@@ -34,8 +34,7 @@ public:
                  DynVec<T>(cpts.size(), T(1)),
                  defaultKnots(cpts.size()),
                  cpts.size() - 1)
-  {
-  }
+  {}
 
   CptRat operator()(T const &u) const
   {
@@ -49,7 +48,7 @@ public:
       throw std::runtime_error("Could not find knot span for u");
 
     size_t const span = std::distance(bK, kIt);
-    auto const bf = basisFuns(span, _p, u, bK, eK);
+    auto const bf     = basisFuns(span, _p, u, bK, eK);
 
     CptNonRat pw(0);
 
@@ -64,7 +63,7 @@ private:
   {
     size_t const m = 2 * (numCpts - 1) + 1;
     DynVec<T> knots(m + 1, T(0));
-    std::fill(begin(knots) + (m + 1)/ 2, end(knots), T(1));
+    std::fill(begin(knots) + (m + 1) / 2, end(knots), T(1));
     return knots;
   }
 
