@@ -11,10 +11,13 @@ def main():
 
     # remove trailing forward slash
     # if it exists
-    if modString[-1] == '/':
-        modString = modString[:-1]
+    if modString[-3:] == '.py':
+        modString = modString[:-3]
 
     modString = modString.replace('/', '.')
+
+    if modString[:8] == 'modules.':
+        modString = modString[8:]
 
     thisFolder = os.path.dirname(os.path.realpath(__file__))
 
