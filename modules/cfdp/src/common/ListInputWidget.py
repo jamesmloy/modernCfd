@@ -19,13 +19,26 @@ class ListInputWidget(Qt.QGroupBox):
 
         self.setLayout(lo)
 
+        self.nBoxes = nBoxes
+
+    def boxCount(self):
+        return self.nBoxes
+
     def addBoxes(self, cnt):
+        self.nBoxes += cnt
         for i in range(cnt):
             b = Qt.QLineEdit()
             self.boxes.append(b)
             self.layout().addWidget(b)
 
     def removeBoxes(self, cnt):
-        for i in range(cnt):
+        # make sure we don't go negative
+        nRemove = cnt
+        if cnt > self.nBoxes:
+            nRemove = self.nBoxes
+
+        self.nBoxes -= nRemove
+
+        for i in range(nRemove):
             b = self.boxes.pop()
             b.close()

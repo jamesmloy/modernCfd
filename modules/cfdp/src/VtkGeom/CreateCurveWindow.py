@@ -1,83 +1,8 @@
 from PyQt5 import Qt
 
-from ..common.ListInputWidget import ListInputWidget
+from .ControlPointsWidget import ControlPointsWidget
 
 from ..geometry.NurbsUtils import calculateKnotCount
-
-
-class MultipleListInput(Qt.QWidget):
-
-    def __init__(self, parent, boxCounts, titles):
-        super().__init__(parent=parent)
-
-        lo = Qt.QHBoxLayout()
-        self.setLayout(lo)
-
-        self.lo = lo
-
-        self.listInputs = []
-
-        for b, t in zip(boxCounts, titles):
-            liw = ListInputWidget(self, b, t)
-            self.listInputs.append(liw)
-            lo.addWidget(liw)
-
-    def removeLast(self):
-        lastI = self.listInputs.pop()
-        lastI.close()
-
-    def addList(self, cnt, title):
-        liw = ListInputWidget(self, cnt, title)
-        self.listInputs.append(liw)
-        self.lo.addWidget(liw)
-
-    def addBox(self):
-        for inp in self.listInputs:
-            inp.addBoxes(1)
-
-    def removeBox(self):
-        for inp in self.listInputs:
-            inp.removeBoxes(1)
-
-
-class ControlPointsWidget(Qt.QWidget):
-
-    class ControlPointBox(MultipleListInput):
-        def __init__(self, parent, isNurb, p, npts):
-
-            titles = ["Points", "Weights"]
-            boxCounts = [npts, npts]
-
-            if isNurb:
-                titles.append("Knots")
-                boxCounts.append(calculateKnotCount(npts, p))
-
-            super().__init__(parent, boxCounts, titles)
-
-    def __init__(self, parent, isNurb, p, npts):
-        super().__init__(parent=parent)
-
-        lo = Qt.QVBoxLayout()
-        self.setLayout(lo)
-
-        self.ptsInput = ControlPointsWidget.ControlPointBox(self,
-                                                            isNurb,
-                                                            p, npts)
-        lo.addWidget(self.ptsInput)
-
-        addPtButton = Qt.QPushButton(text="Add Point", parent=self)
-        addPtButton.clicked.connect(self.ptsInput.addBox)
-        lo.addWidget(addPtButton)
-
-        delPtButton = Qt.QPushButton(text="Remove Point", parent=self)
-        delPtButton.clicked.connect(self.ptsInput.removeBox)
-        lo.addWidget(delPtButton)
-
-    def addKnots(self, cnt):
-        self.ptsInput.addList(cnt, "Knots")
-
-    def removeKnots(self):
-        self.ptsInput.removeLast()
 
 
 class CreateCurveWindow(Qt.QDialog):
@@ -88,6 +13,11 @@ class CreateCurveWindow(Qt.QDialog):
         self.numPts = 3
         self.setupUi()
         self.show()
+
+    def _adjustAllSizes(self):
+        self.curveInfoBox.adjustSize()
+        self.curveData.adjustSize()
+        self.adjustSize()
 
     def getCurveTypeIndex(self):
         return self._curveInfo.currentIndex()
@@ -110,14 +40,15 @@ class CreateCurveWindow(Qt.QDialog):
             return calculateKnotCount(self.numPts, p)
 
     def _curveTypeChanged(self, i):
+        isNurb = i == 1
+        self.curveData.changeNurbStatus(isNurb)
+
         if i == 0:
-            self.curveData.removeKnots()
             self.curveInfoBox.layout().removeWidget(self.polyLabel)
             self.curveInfoBox.layout().removeWidget(self.polyOrderBox)
             self.polyOrderBox.close()
             self.polyLabel.close()
         elif i == 1:
-            self.curveData.addKnots(self.calculateKnotCount())
             self.curveInfoBox.layout().addWidget(self.polyLabel)
             self.curveInfoBox.layout().addWidget(self.polyOrderBox)
             self.polyOrderBox.show()
@@ -125,6 +56,7 @@ class CreateCurveWindow(Qt.QDialog):
 
         self.curveData.show()
         self.curveInfoBox.show()
+        self._adjustAllSizes()
 
     def _curvesComboBox(self):
         b = Qt.QComboBox()
@@ -135,6 +67,18 @@ class CreateCurveWindow(Qt.QDialog):
         self._curveInfo = b
         return b
 
+    def _polyOrderChanged(self, newP):
+        # ignore empty boxes
+        if len(newP) == 0:
+            return
+
+        p = int(newP)
+
+        # make sure it's always greater than 0
+        p = max(0, p)
+        self.curveData.newPolyOrder(p)
+        self._adjustAllSizes()
+
     def _curveTypeBox(self):
         box = Qt.QGroupBox(title="Curve Info")
         self.curveInfoBox = box
@@ -144,14 +88,12 @@ class CreateCurveWindow(Qt.QDialog):
         self.curveTypesSelector = self._curvesComboBox()
         lo.addWidget(self.curveTypesSelector)
 
-        # m = n + p + 1
-        # m + 1 knots, n + 1 points, p degree
-
         self.polyLabel = Qt.QLabel("Polynomial Order:")
         self.polyOrderBox = Qt.QLineEdit("3")
         orderVal = Qt.QIntValidator()
         orderVal.setBottom(0)
         self.polyOrderBox.setValidator(orderVal)
+        self.polyOrderBox.textChanged.connect(self._polyOrderChanged)
 
         if self.getCurveTypeIndex() == 1:
             lo.addWidget(self.polyLabel)
@@ -170,7 +112,6 @@ class CreateCurveWindow(Qt.QDialog):
         return box
 
     def setupUi(self):
-
         # main layout holding all the
         # group boxes
         mainLayout = Qt.QVBoxLayout()
